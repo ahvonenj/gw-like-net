@@ -49,7 +49,15 @@ function GwNet(net)
 
 GwNet.prototype.update = function(dt)
 {
+	for(var y = 0; y < this.netnodes.length; y++)
+	{
+		for(var x = 0; x < this.netnodes[y].length; x++)
+		{
+			var node = this.netnodes[y][x];
 
+			node.update(dt);
+		}
+	}
 }
 
 GwNet.prototype.draw = function()
@@ -82,4 +90,27 @@ GwNet.prototype.draw = function()
 	}
 
 	this.flg.endFill();  
+}
+
+GwNet.prototype.nodesInRadius = function(mx, my)
+{
+	var nodes = [];
+
+	for(var y = 0; y < this.netnodes.length; y++)
+	{
+		for(var x = 0; x < this.netnodes[y].length; x++)
+		{
+			var node = this.netnodes[y][x];
+
+			var vm = new Victor(mx, my);
+			var vn = new Victor(node.x, node.y);
+
+			if(vm.distance(vn) <= Global.forceradius)
+			{
+				nodes.push(node);
+			}
+		}
+	}
+
+	return nodes;
 }

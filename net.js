@@ -12,7 +12,7 @@ function Net()
 	{ 
 		view: document.querySelector('canvas'),
 		backgroundColor: 0x000000,
-		antialias: true 
+		antialias: true
 	});
 
 	Global.stageoffset = 
@@ -55,21 +55,34 @@ function Net()
 
 	this.stage.on('mousedown', function(data)
 	{
-		console.log('d')
 		var evt = data.data.originalEvent;
 		Global.mouse.isdown = true;
 		Global.mouse.isup = false;
-		Global.mouse.clicked = true;
 	});
 
 	this.stage.on('mouseup', function(data)
 	{
-		console.log('u')
 		var evt = data.data.originalEvent;
 		Global.mouse.isdown = false;
 		Global.mouse.isup = true;
-		Global.mouse.clicked = false;
 	});
+
+	this.stage.on('click', function(data)
+	{
+		var evt = data.data.originalEvent;
+		var vx = evt.clientX - Global.stageoffset.x;
+		var vy = evt.clientY - Global.stageoffset.y;
+
+		self.blastNodes(vx, vy);
+	});
+
+	this.clickhack = new PIXI.Graphics();
+	this.clickhack.clear();
+    this.clickhack.beginFill(0xffffff, 0);
+    this.clickhack.drawRect(0, 0, Global.width, Global.height)
+    this.clickhack.endFill();   
+
+    this.stage.addChild(this.clickhack);
 }
 
 Net.prototype.start = function()
@@ -111,8 +124,6 @@ Net.prototype.animate = function(net)
 
 Net.prototype.update = function(dt)
 {
-
-
 	this.gwnet.update(dt);
 
 	Lerppu.update(this.t.time);
@@ -122,4 +133,25 @@ Net.prototype.render = function()
 {
 	this.gwnet.draw();
 	this.renderer.render(this.stage);
+}
+
+Net.prototype.blastNodes = function(mx, my)
+{
+	console.log('Blast!');
+
+	var nodes = this.gwnet.nodesInRadius(mx, my);
+
+	for(var i = 0; i < nodes.length; i++)
+	{
+		var node = nodes[i];
+
+		var vn = new Victor(node.x, node.y);
+		var vm = new Victor(mx, my);
+
+		var angleRadians = Math.atan2(vm.y - vn.y, vm.x - vn.x);
+
+		node.applyForce(angleRadians);
+	}
+
+	console.log(nodes);
 }
