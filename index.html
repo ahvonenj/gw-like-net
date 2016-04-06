@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+	<head>
+		<title>gw-like-net</title>
+
+		<link rel = "stylesheet" type = "text/css" href = "index.css">
+
+		<script src = "lib/jquery-2.2.2.min.js"></script>
+		<script src = "lib/pixi.min.js"></script>
+		<script src = "lib/chance.min.js"></script>
+		<script src = "lib/victor.min.js"></script>
+		<script src = "lib/lerppu.js"></script>
+
+		<script src = "class/gwnet.js"></script>
+		<script src = "class/netnode.js"></script>
+		<script src = "class/global.js"></script>
+		<script src = "net.js"></script>
+	</head>
+	<body>
+		<div id = "wrapper">
+			<canvas id = "canvas"></canvas>
+		</div>
+	</body>
+	<script>
+		var net = null;
+
+		$(document).ready(function()
+		{
+			net = new Net();
+			net.start();
+		})
+	</script>
+</html>
