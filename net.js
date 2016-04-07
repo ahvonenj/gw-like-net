@@ -97,7 +97,7 @@ Net.prototype.start = function()
 		y: $(canvas).offset().top
 	}
 
-	PixiDebugger.DebugPoint(10, 10, null, null, null, function(dt, t)
+	/*PixiDebugger.DebugPoint(10, 10, null, null, null, function(dt, t)
 	{
 		this.position.x += dt;
 		this.position.y += dt;
@@ -109,7 +109,7 @@ Net.prototype.start = function()
 		this.lineStyle(3, 0xFF00FF, 1);
 		this.moveTo(100 + Math.cos(t) * 2000 * dt, 100 + Math.sin(t) * 2000 * dt)
 		this.lineTo(300 + Math.cos(t / 10) * 1000 * dt, 300 + Math.sin(t / 10) * 1000 * dt)
-	});
+	});*/
 
 	requestAnimationFrame(function(t) { self.animate(self); });
 }

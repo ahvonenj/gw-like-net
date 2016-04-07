@@ -15,12 +15,12 @@ var Global =
 		isup: true
 	},
 
-	forceradius: 75,
+	forceradius: 250,
 	blastforce: 0.001,
 
 	spanningforce: 0.11,
 
-	decceleration: 0.05,
+	decceleration: 0.00,
 
 	maxvel: 10
 }
