@@ -22,7 +22,7 @@ var Global =
 
 	spanningforce: 275,
 
-	decceleration: 0.000,
+	decceleration: 5.0001,
 
 	maxvel: 10,
 
