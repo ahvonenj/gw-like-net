@@ -76,6 +76,15 @@ function Net()
 		self.blastNodes(vx, vy);
 	});
 
+	this.stage.on('tap', function(data)
+	{
+		var evt = data.data.originalEvent;
+		var vx = evt.clientX - Global.stageoffset.x;
+		var vy = evt.clientY - Global.stageoffset.y;
+
+		self.blastNodes(vx, vy);
+	});
+
 	this.clickhack = new PIXI.Graphics();
 	this.clickhack.clear();
     this.clickhack.beginFill(0xffffff, 0);
