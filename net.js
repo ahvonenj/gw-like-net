@@ -160,6 +160,16 @@ Net.prototype.blastNodes = function(mx, my)
 	{
 		var node = nodes[i];
 
+		node.blasted = true;
+		node.blastenergy = Global.blastenergy;
+
+		var affectednodes = this.gwnet.affectedNodes(node);
+
+		for(var j = 0; j < affectednodes.length; j++)
+		{
+			affectednodes[j].sprite.tint = 0xFF00FF;
+		}
+
 		var vn = new Victor(node.x, node.y);
 		var vm = new Victor(mx, my);
 

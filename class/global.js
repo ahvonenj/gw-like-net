@@ -15,8 +15,10 @@ var Global =
 		isup: true
 	},
 
-	forceradius: 250,
+	forceradius: 125,
 	blastforce: 0.001,
+	blastenergy: 7,
+	energyconsumption: 1,
 
 	spanningforce: 0.01,
 

@@ -19,11 +19,14 @@ function GwNet(net)
 
 	this.netnodes = [];
 
-	for(var y = 0; y < Global.width / this.netresolution; y++)
+	var prevnode = null;
+	var prevrow = null;
+
+	for(var y = 0; y < Global.height / this.netresolution; y++)
 	{
 		var noderow = [];
 
-		for(var x = 0; x < Global.height / this.netresolution; x++)
+		for(var x = 0; x < Global.width / this.netresolution; x++)
 		{
 			var nx = x * this.netresolution;
 			var ny = y * this.netresolution;
@@ -35,14 +38,37 @@ function GwNet(net)
 				node.addFriend('left', noderow[x - 1]);
 			}
 
+			if(typeof noderow[x + 1] !== 'undefined')
+			{
+				
+			}
+
 			if(y > 0)
 			{
 				node.addFriend('up', this.netnodes[y - 1][x]);
 			}
 
+			if(typeof this.netnodes[y + 1] !== 'undefined')
+			{
+				node.addFriend('down', this.netnodes[y + 1][x]);
+			}
+
+			if(prevnode !== null)
+			{
+				prevnode.addFriend('right', node);
+			}
+
+			if(prevrow !== null)
+			{
+				prevrow[x].addFriend('down', node);
+			}
+
+			prevnode = node;
+
 			noderow.push(node);
 		}
 
+		prevrow = noderow;
 		this.netnodes.push(noderow);
 	}
 }
@@ -113,4 +139,57 @@ GwNet.prototype.nodesInRadius = function(mx, my)
 	}
 
 	return nodes;
+}
+
+GwNet.prototype.affectedNodes = function(node)
+{
+	var initialnode = node;
+	var affectednodes = [];
+
+	if(node.blastenergy === 0)
+		return [];
+
+	var e = initialnode.blastenergy;
+	var node = initialnode.getFriend('up');
+
+	while(e > 0 && node !== null && typeof node !== 'undefined')
+	{
+		affectednodes.push(node);
+		node = node.getFriend('up');
+		e -= Global.energyconsumption;
+	}
+
+	var node = initialnode.getFriend('right');
+	e = initialnode.blastenergy;
+
+	while(e > 0 && node !== null && typeof node !== 'undefined')
+	{
+		affectednodes.push(node);
+		node = node.getFriend('right');
+		e -= Global.energyconsumption;
+	}
+
+
+	var node = initialnode.getFriend('down');
+	e = initialnode.blastenergy;
+
+	while(e > 0 && node !== null && typeof node !== 'undefined')
+	{
+		affectednodes.push(node);
+		node = node.getFriend('down');
+		e -= Global.energyconsumption;
+	}
+
+
+	var node = initialnode.getFriend('left');
+	e = initialnode.blastenergy;
+
+	while(e > 0 && node !== null && typeof node !== 'undefined')
+	{
+		affectednodes.push(node);
+		node = node.getFriend('left');
+		e -= Global.energyconsumption;
+	}
+
+	return affectednodes;
 }

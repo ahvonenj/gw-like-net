@@ -23,6 +23,10 @@ function Netnode(net, tex, x, y)
 	this.friends = [];
 	this.friendgraphics = [];
 
+	this.blasted = false;
+	this.affected = false;
+	this.blastenergy = Global.blastenergy;
+
 
 	this.tex = tex;
 	this.sprite = new PIXI.Sprite(this.tex);
@@ -53,8 +57,41 @@ Netnode.prototype.addFriend = function(dir, netnode)
 		case 'left':
 			this.friends[3] = netnode;
 			break;
+
+		default:
+			break;
 	}
 	this.friends.push(netnode);
+}
+
+Netnode.prototype.getFriend = function(dir)
+{
+	var n = null;
+
+	switch(dir)
+	{
+		case 'up':
+			n = this.friends[0];
+			break;
+
+		case 'right':
+			n = this.friends[1];
+			break;
+
+		case 'down':
+			n = this.friends[2];
+			break;
+
+		case 'left':
+			n = this.friends[3];
+			break;
+
+		default:
+			n = null;
+			break;
+	}
+
+	return n;
 }
 
 Netnode.prototype.update = function(dt)
@@ -130,6 +167,34 @@ Netnode.prototype.update = function(dt)
 	this.y += this.velocity.y * dt;
 
 	var vos = new Victor(Math.cos(this.acceleration.x), Math.sin(this.acceleration.y));
+
+	/*if(this.blasted)
+	{
+		for(var key in this.friends)
+		{
+			if(this.friends.hasOwnProperty(key))
+			{
+				var friend = this.friends[key];
+
+				friend.acceleration.x += vos.x;
+				friend.acceleration.y += vos.y;
+			}
+		}
+	}
+
+	if(this.affected)
+	{
+		for(var key in this.friends)
+		{
+			if(this.friends.hasOwnProperty(key))
+			{
+				var friend = this.friends[key];
+
+				friend.acceleration.x += vos.x;
+				friend.acceleration.y += vos.y;
+			}
+		}
+	}*/
 
 	/*for(var key in this.friends)
 	{
