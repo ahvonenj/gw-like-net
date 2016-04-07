@@ -43,6 +43,9 @@ function Net()
     this.gwnet = new GwNet(this);
 
 
+    this.blastivl = null;
+
+
     this.stage.interactive = true;
 
     this.stage.on('mousemove', function(data)
@@ -58,6 +61,14 @@ function Net()
 		var evt = data.data.originalEvent;
 		Global.mouse.isdown = true;
 		Global.mouse.isup = false;
+
+		var x = evt.clientX - Global.stageoffset.x;
+		var y = evt.clientY - Global.stageoffset.y;
+
+		self.blastivl = setInterval(function()
+		{
+			//self.blastNodes(Global.mouse.x, Global.mouse.y);
+		}, Global.blastrate)
 	});
 
 	this.stage.on('mouseup', function(data)
@@ -65,6 +76,8 @@ function Net()
 		var evt = data.data.originalEvent;
 		Global.mouse.isdown = false;
 		Global.mouse.isup = true;
+
+		clearInterval(self.blastivl);
 	});
 
 	this.stage.on('click', function(data)
@@ -182,7 +195,11 @@ Net.prototype.blastNodes = function(mx, my)
 		var vn = new Victor(node.x, node.y);
 		var vm = new Victor(mx, my);
 
-		var angleRadians = Math.atan2(vm.y - vn.y, vm.x - vn.x);
+		var angleRadians = Math.atan2(vn.y - vm.y, vn.x - vm.x);
+
+		var randomAngle = chance.floating({min: -10, max: 10});
+
+		angleRadians += (randomAngle * (Math.PI / 180));
 
 		node.applyForce(angleRadians);
 	}

@@ -16,13 +16,15 @@ var Global =
 	},
 
 	forceradius: 150,
-	blastforce: 0.001,
+	blastforce: 30000,
 	blastenergy: 8,
 	energyconsumption: 1,
 
-	spanningforce: 0.01,
+	spanningforce: 275,
 
-	decceleration: 0.00,
+	decceleration: 0.000,
 
-	maxvel: 10
+	maxvel: 10,
+
+	blastrate: 1
 }
