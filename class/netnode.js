@@ -157,7 +157,7 @@ Netnode.prototype.applyForce = function(a)
 	this.acceleration.x = v.x;
 	this.acceleration.y = v.y;
 
-	PixiDebugger.DebugVector({ x: this.ox, y: this.oy }, { x: this.x, y: this.y }, null, null, null, function(dt, t, o, v)
+	/*PixiDebugger.DebugVector({ x: this.ox, y: this.oy }, { x: this.x, y: this.y }, null, null, null, function(dt, t, o, v)
 	{
 		var vo = new Victor(self.ox, self.oy);
 		var vn = new Victor(self.x, self.y);
@@ -198,7 +198,7 @@ Netnode.prototype.applyForce = function(a)
 		/*this.moveTo(self.x, self.y);
 		this.lineStyle(4, 0x00FFFF, 0.5);
 		this.lineTo(self.x + Math.cos(self.acceleration.x) * self.acceleration.x * 100, self.y + Math.sin(self.acceleration.y) * self.acceleration.y * 100);*/
-	});
+	//});
 
 	//console.log('applying force', this.velocity.x, this.velocity.y);
 }
