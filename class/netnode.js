@@ -103,26 +103,20 @@ Netnode.prototype.update = function(dt)
 
 	if(vn.distance(vo) > 0)
 	{
-		var sa = Math.atan2(vn.y - vo.y, vn.x - vo.x);
+		var sa = Math.atan2(vo.y - vn.y, vo.x - vn.x);
+
 
 		vs = new Victor();
-	
+		
 		vs.x = Math.cos(sa);
 		vs.y = Math.sin(sa);
+
 	
 		var vonormal = vo.normalize();
 		var vnnormal = vn.normalize();
 		var dot = vnnormal.dot(vonormal);
 
-		if(Math.cos(sa) > 0 || Math.cos(sa) < Math.PI / 2)
-		{
-			vs.invertX();
-		}
-
-		if(Math.sin(sa) > 0 || Math.sin(sa) < Math.PI / 2)
-		{
-			vs.invertY();
-		}
+		//vs = vs.invert();
 	}
 	else
 	{
@@ -142,11 +136,17 @@ Netnode.prototype.update = function(dt)
 		this.acceleration.y -= Global.decceleration;
 	}
 
-	if(this.acceleration.x > 1)
-		this.acceleration.x = 1;
+	/*if(this.acceleration.x > 1000)
+		this.acceleration.x = 1000;
 
-	if(this.acceleration.y > 1)
-		this.acceleration.y = 1;
+	if(this.acceleration.y > 1000)
+		this.acceleration.y = 1000;
+
+	if(this.acceleration.x < -1000)
+		this.acceleration.x = -1000;
+
+	if(this.acceleration.y < -1000)
+		this.acceleration.y = -1000;*/
 
 	this.velocity.x += this.acceleration.x;
 	this.velocity.y += this.acceleration.y;
@@ -165,6 +165,16 @@ Netnode.prototype.update = function(dt)
 
 	this.x += this.velocity.x * dt;
 	this.y += this.velocity.y * dt;
+
+	/*if(vn.distance(vo) < 0.000001)
+	{
+		this.x = this.ox;
+		this.y = this.oy;
+		this.acceleration.x = 0;
+		this.acceleration.y = 0;
+		this.velocity.x = 0;
+		this.velocity.y = 0;
+	}*/
 
 	var vos = new Victor(Math.cos(this.acceleration.x), Math.sin(this.acceleration.y));
 
@@ -218,9 +228,28 @@ Netnode.prototype.applyForce = function(a)
 {
 	var self = this;
 
-	var v = new Victor(Math.cos(a) * Global.blastforce, Math.sin(a) * Global.blastforce).invert();
+	var v = new Victor(Math.cos(a) * Global.blastforce, Math.sin(a) * Global.blastforce);
+
+	/*if(Math.cos(a) > 0 || Math.cos(a) < Math.PI / 2)
+	{
+		v.invertX();
+	}
+
+	if(Math.sin(a) > 0 || Math.sin(a) < Math.PI / 2)
+	{
+		v.invertY();
+	}*/
+
+	this.vv = v;
+
 	this.acceleration.x = v.x;
 	this.acceleration.y = v.y;
+
+	/*PixiDebugger.DebugVector({ x: this.ox, y: this.oy }, { x: v.x, y: v.y }, null, null, null, function(dt, t, o, v)
+	{
+		this.moveTo(self.ox, self.oy);
+		this.lineTo(self.vv.x, self.vv.y);
+	})*/
 
 	/*PixiDebugger.DebugVector({ x: this.ox, y: this.oy }, { x: this.x, y: this.y }, null, null, null, function(dt, t, o, v)
 	{
