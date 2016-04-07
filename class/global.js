@@ -3,9 +3,9 @@ var Global =
 	width: 800,
 	height: 800,
 
-	netpoints: 40,
+	netpoints: 60,
 
-	noderad: 3,
+	noderad: 1,
 
 	mouse:
 	{
@@ -15,9 +15,9 @@ var Global =
 		isup: true
 	},
 
-	forceradius: 125,
+	forceradius: 150,
 	blastforce: 0.001,
-	blastenergy: 7,
+	blastenergy: 8,
 	energyconsumption: 1,
 
 	spanningforce: 0.01,
