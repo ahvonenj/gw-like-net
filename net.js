@@ -79,8 +79,8 @@ function Net()
 	this.stage.on('tap', function(data)
 	{
 		var evt = data.data.originalEvent;
-		var vx = evt.clientX - Global.stageoffset.x;
-		var vy = evt.clientY - Global.stageoffset.y;
+		var vx = data.data.global.x;
+		var vy = data.data.global.y;
 
 		self.blastNodes(vx, vy);
 	});
