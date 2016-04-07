@@ -83,6 +83,8 @@ function Net()
     this.clickhack.endFill();   
 
     this.stage.addChild(this.clickhack);
+
+    PixiDebugger.SetProgram(this);
 }
 
 Net.prototype.start = function()
@@ -95,6 +97,19 @@ Net.prototype.start = function()
 		y: $(canvas).offset().top
 	}
 
+	PixiDebugger.DebugPoint(10, 10, null, null, null, function(dt, t)
+	{
+		this.position.x += dt;
+		this.position.y += dt;
+	});
+
+	PixiDebugger.DebugLine(100, 100, 200, 200, null, null, null, function(dt, t)
+	{
+		this.clear();
+		this.lineStyle(3, 0xFF00FF, 1);
+		this.moveTo(100 + Math.cos(t) * 2000 * dt, 100 + Math.sin(t) * 2000 * dt)
+		this.lineTo(300 + Math.cos(t / 10) * 1000 * dt, 300 + Math.sin(t / 10) * 1000 * dt)
+	});
 
 	requestAnimationFrame(function(t) { self.animate(self); });
 }
@@ -112,7 +127,7 @@ Net.prototype.animate = function(net)
 
 	while(net.t.acc >= net.t.dt) 
 	{
-		net.update(net.t.dt);
+		net.update(net.t.dt, net.t.time);
 
 		net.t.time += net.t.dt;
 		net.t.acc -= net.t.dt;
@@ -122,11 +137,11 @@ Net.prototype.animate = function(net)
 	requestAnimationFrame(function(t) { net.animate(net); });
 }
 
-Net.prototype.update = function(dt)
+Net.prototype.update = function(dt, t)
 {
-	this.gwnet.update(dt);
-
-	Lerppu.update(this.t.time);
+	this.gwnet.update(dt, t);
+	Lerppu.update(t);
+	PixiDebugger.UpdateDebugState(dt, t);
 }
 
 Net.prototype.render = function()

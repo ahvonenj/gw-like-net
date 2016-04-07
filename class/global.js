@@ -3,7 +3,7 @@ var Global =
 	width: 800,
 	height: 800,
 
-	netpoints: 20,
+	netpoints: 40,
 
 	noderad: 3,
 
@@ -15,12 +15,12 @@ var Global =
 		isup: true
 	},
 
-	forceradius: 50,
+	forceradius: 75,
 	blastforce: 0.001,
 
-	spanningforce: 0.01,
+	spanningforce: 0.11,
 
-	decceleration: 0.000001,
+	decceleration: 0.05,
 
 	maxvel: 10
 }

@@ -60,14 +60,15 @@ Netnode.prototype.addFriend = function(dir, netnode)
 Netnode.prototype.update = function(dt)
 {
 	var vs;
+	
 	var vn = new Victor(this.x, this.y);
 	var vo = new Victor(this.ox, this.oy);
 
 	if(vn.distance(vo) > 0)
 	{
-		var sa = Math.atan2(vo.y - vn.y, vo.x - vn.x);
-		vs = new Victor();
+		var sa = Math.atan2(vn.y - vo.y, vn.x - vo.x);
 
+		vs = new Victor();
 	
 		vs.x = Math.cos(sa);
 		vs.y = Math.sin(sa);
@@ -76,15 +77,15 @@ Netnode.prototype.update = function(dt)
 		var vnnormal = vn.normalize();
 		var dot = vnnormal.dot(vonormal);
 
-		if(dot < 0)
+		if(Math.cos(sa) > 0 || Math.cos(sa) < Math.PI / 2)
 		{
 			vs.invertX();
 		}
 
-		/*if(vn.y > vo.y)
+		if(Math.sin(sa) > 0 || Math.sin(sa) < Math.PI / 2)
 		{
 			vs.invertY();
-		}*/
+		}
 	}
 	else
 	{
@@ -94,13 +95,15 @@ Netnode.prototype.update = function(dt)
 
 	
 
-	this.acceleration.x += vs.x * Global.spanningforce * vo.distance(vn);
+	this.acceleration.x += vs.x * Global.spanningforce;
 	this.acceleration.y += vs.y * Global.spanningforce;
 
 
-
-	this.acceleration.x -= Global.decceleration;
-	this.acceleration.y -= Global.decceleration;
+	if(vn.distance(vo) > 0)
+	{
+		this.acceleration.x -= Global.decceleration;
+		this.acceleration.y -= Global.decceleration;
+	}
 
 	if(this.acceleration.x > 1)
 		this.acceleration.x = 1;
@@ -109,7 +112,7 @@ Netnode.prototype.update = function(dt)
 		this.acceleration.y = 1;
 
 	this.velocity.x += this.acceleration.x;
-	//this.velocity.y += this.acceleration.y;
+	this.velocity.y += this.acceleration.y;
 
 	if(this.velocity.x > Global.maxvel)
 		this.velocity.x = Global.maxvel;
@@ -126,7 +129,18 @@ Netnode.prototype.update = function(dt)
 	this.x += this.velocity.x * dt;
 	this.y += this.velocity.y * dt;
 
+	var vos = new Victor(Math.cos(this.acceleration.x), Math.sin(this.acceleration.y));
 
+	/*for(var key in this.friends)
+	{
+		if(this.friends.hasOwnProperty(key))
+		{
+			var friend = this.friends[key];
+
+			friend.acceleration.x += vos.x;
+			friend.acceleration.y += vos.y;
+		}
+	}*/
 
 	if(this.sprite !== null)
 	{
@@ -137,9 +151,54 @@ Netnode.prototype.update = function(dt)
 
 Netnode.prototype.applyForce = function(a)
 {
+	var self = this;
+
 	var v = new Victor(Math.cos(a) * Global.blastforce, Math.sin(a) * Global.blastforce).invert();
 	this.acceleration.x = v.x;
 	this.acceleration.y = v.y;
+
+	PixiDebugger.DebugVector({ x: this.ox, y: this.oy }, { x: this.x, y: this.y }, null, null, null, function(dt, t, o, v)
+	{
+		var vo = new Victor(self.ox, self.oy);
+		var vn = new Victor(self.x, self.y);
+
+		var sa = Math.atan2(vn.y - vo.y, vn.x - vo.x);
+		vs = new Victor();
+
+	
+		vs.x = Math.cos(sa);
+		vs.y = Math.sin(sa);
+
+		var vonormal = vo.normalize();
+		var vnnormal = vn.normalize();
+		var dot = vnnormal.dot(vonormal);
+
+		var fv = new Victor(vs.x * Global.spanningforce * 1000, vs.y * Global.spanningforce * 1000);
+
+		if(Math.cos(sa) > 0 || Math.cos(sa) < Math.PI / 2)
+			fv.invertX();
+
+		if(Math.sin(sa) > 0 || Math.sin(sa) < Math.PI / 2)
+			fv.invertY();
+
+		/*if(Math.sin(sa) > 0)
+			fv.invertY();*/
+
+		/*this.moveTo(self.ox, self.oy);
+		this.lineTo(self.x, self.y);*/
+
+		/*this.moveTo(self.ox, self.oy);
+		this.lineStyle(4, 0x00FF00, 1);
+		this.lineTo(self.ox + vs.x * 20, self.oy + vs.y * 20);
+
+		this.moveTo(self.ox, self.oy);
+		this.lineStyle(2, 0xFFFF00, 1);
+		this.lineTo(self.ox + fv.x, self.oy + fv.y);*/
+
+		/*this.moveTo(self.x, self.y);
+		this.lineStyle(4, 0x00FFFF, 0.5);
+		this.lineTo(self.x + Math.cos(self.acceleration.x) * self.acceleration.x * 100, self.y + Math.sin(self.acceleration.y) * self.acceleration.y * 100);*/
+	});
 
 	console.log('applying force', this.velocity.x, this.velocity.y);
 }
