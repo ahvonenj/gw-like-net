@@ -152,7 +152,7 @@ Net.prototype.render = function()
 
 Net.prototype.blastNodes = function(mx, my)
 {
-	console.log('Blast!');
+	//console.log('Blast!');
 
 	var nodes = this.gwnet.nodesInRadius(mx, my);
 
@@ -168,5 +168,5 @@ Net.prototype.blastNodes = function(mx, my)
 		node.applyForce(angleRadians);
 	}
 
-	console.log(nodes);
+	//console.log(nodes);
 }

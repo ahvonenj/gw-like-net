@@ -200,5 +200,5 @@ Netnode.prototype.applyForce = function(a)
 		this.lineTo(self.x + Math.cos(self.acceleration.x) * self.acceleration.x * 100, self.y + Math.sin(self.acceleration.y) * self.acceleration.y * 100);*/
 	});
 
-	console.log('applying force', this.velocity.x, this.velocity.y);
+	//console.log('applying force', this.velocity.x, this.velocity.y);
 }

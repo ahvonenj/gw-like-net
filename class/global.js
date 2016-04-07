@@ -18,7 +18,7 @@ var Global =
 	forceradius: 250,
 	blastforce: 0.001,
 
-	spanningforce: 0.11,
+	spanningforce: 0.01,
 
 	decceleration: 0.00,
 
