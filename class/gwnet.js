@@ -4,7 +4,7 @@ function GwNet(net)
 
 	this.netg = new PIXI.Graphics();
 	this.netg.clear();
-    this.netg.beginFill(0x3498db, 1);
+    this.netg.beginFill(Global.nodecolor, 1);
     this.netg.drawCircle(999999, 999999, Global.noderad);
     this.netg.endFill();   
 
@@ -12,6 +12,8 @@ function GwNet(net)
 
     this.flg = new PIXI.Graphics();
     this.net.stage.addChild(this.flg);
+
+    this.color = Global.netcolor;
 
 
 
@@ -31,16 +33,11 @@ function GwNet(net)
 			var nx = x * this.netresolution;
 			var ny = y * this.netresolution;
 
-			var node = new Netnode(this.net, this.nettex, nx + Global.noderad * 2, ny + Global.noderad * 2);
+			var node = new Netnode(this.net, this.nettex, nx + Global.noderad * 2, ny + Global.noderad * 2, Global.nodetint);
 
 			if(x > 0)
 			{
 				node.addFriend('left', noderow[x - 1]);
-			}
-
-			if(typeof noderow[x + 1] !== 'undefined')
-			{
-				
 			}
 
 			if(y > 0)
@@ -90,13 +87,15 @@ GwNet.prototype.draw = function()
 {
 	this.flg.clear();
     //this.flg.beginFill(0x00FF00, 1);
-    this.flg.lineStyle(1, 0x2980b9, 1);
+    this.flg.lineStyle(1, this.color, 1);
 
 	for(var y = 0; y < this.netnodes.length; y++)
 	{
 		for(var x = 0; x < this.netnodes[y].length; x++)
 		{
 			var node = this.netnodes[y][x];
+
+			this.flg.lineStyle(1, node.color, 1);
 			
 			this.flg.moveTo(node.x, node.y);
 
@@ -152,43 +151,55 @@ GwNet.prototype.affectedNodes = function(node)
 	var e = initialnode.blastenergy;
 	var node = initialnode.getFriend('up');
 
-	while(e > 0 && node !== null && typeof node !== 'undefined')
+	if(node !== null && typeof node !== 'undefined' && initialnode.y > node.y)
 	{
-		affectednodes.push(node);
-		node = node.getFriend('up');
-		e -= Global.energyconsumption;
+		while(e > 0 && node !== null && typeof node !== 'undefined')
+		{
+			affectednodes.push(node);
+			node = node.getFriend('up');
+			e -= Global.energyconsumption;
+		}
 	}
 
 	var node = initialnode.getFriend('right');
 	e = initialnode.blastenergy;
 
-	while(e > 0 && node !== null && typeof node !== 'undefined')
+	if(node !== null && typeof node !== 'undefined' && initialnode.x < node.x)
 	{
-		affectednodes.push(node);
-		node = node.getFriend('right');
-		e -= Global.energyconsumption;
+		while(e > 0 && node !== null && typeof node !== 'undefined')
+		{
+			affectednodes.push(node);
+			node = node.getFriend('right');
+			e -= Global.energyconsumption;
+		}
 	}
 
 
 	var node = initialnode.getFriend('down');
 	e = initialnode.blastenergy;
 
-	while(e > 0 && node !== null && typeof node !== 'undefined')
+	if(node !== null && typeof node !== 'undefined' && initialnode.y < node.y)
 	{
-		affectednodes.push(node);
-		node = node.getFriend('down');
-		e -= Global.energyconsumption;
+		while(e > 0 && node !== null && typeof node !== 'undefined')
+		{
+			affectednodes.push(node);
+			node = node.getFriend('down');
+			e -= Global.energyconsumption;
+		}
 	}
 
 
 	var node = initialnode.getFriend('left');
 	e = initialnode.blastenergy;
 
-	while(e > 0 && node !== null && typeof node !== 'undefined')
+	if(node !== null && typeof node !== 'undefined' && initialnode.x > node.x)
 	{
-		affectednodes.push(node);
-		node = node.getFriend('left');
-		e -= Global.energyconsumption;
+		while(e > 0 && node !== null && typeof node !== 'undefined')
+		{
+			affectednodes.push(node);
+			node = node.getFriend('left');
+			e -= Global.energyconsumption;
+		}
 	}
 
 	return affectednodes;

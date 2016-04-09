@@ -1,4 +1,4 @@
-function Netnode(net, tex, x, y)
+function Netnode(net, tex, x, y, color)
 {
 	this.net = net;
 
@@ -27,6 +27,7 @@ function Netnode(net, tex, x, y)
 	this.affected = false;
 	this.blastenergy = Global.blastenergy;
 
+	this.color = color || Global.nodecolor;
 
 	this.tex = tex;
 	this.sprite = new PIXI.Sprite(this.tex);
@@ -130,8 +131,8 @@ Netnode.prototype.update = function(dt)
 		this.acceleration.x += vs.x * Global.spanningforce;
 		this.acceleration.y += vs.y * Global.spanningforce;
 
-		this.acceleration.x += -vs.x * 10000.005;
-		this.acceleration.y += -vs.y * 10000.005;
+		//this.acceleration.x += -vs.x * 10000.005;
+		//this.acceleration.y += -vs.y * 10000.005;
 
 
 		this.velocity.x += this.acceleration.x;
@@ -169,6 +170,7 @@ Netnode.prototype.update = function(dt)
 
 	if(this.sprite !== null)
 	{
+		this.sprite.tint = this.color;
 		this.sprite.position.x = this.x;
 		this.sprite.position.y = this.y;
 	}
