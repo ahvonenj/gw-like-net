@@ -3,7 +3,9 @@ var Global =
 	width: 800,
 	height: 800,
 
-	netpoints: 40,
+	netpoints: 30,
+
+	netpadding: 75,
 
 	noderad: 1,
 	nodetint: 0x3498db,

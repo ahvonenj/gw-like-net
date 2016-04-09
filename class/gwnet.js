@@ -17,21 +17,21 @@ function GwNet(net)
 
 
 
-    this.netresolution = Global.width / Global.netpoints - 1;
+    this.netresolution = (Global.width - Global.netpadding) / Global.netpoints - 1;
 
 	this.netnodes = [];
 
 	var prevnode = null;
 	var prevrow = null;
 
-	for(var y = 0; y < Global.height / this.netresolution; y++)
+	for(var y = 0; y < (Global.height - Global.netpadding) / this.netresolution; y++)
 	{
 		var noderow = [];
 
-		for(var x = 0; x < Global.width / this.netresolution; x++)
+		for(var x = 0; x < (Global.width - Global.netpadding) / this.netresolution; x++)
 		{
-			var nx = x * this.netresolution;
-			var ny = y * this.netresolution;
+			var nx = (x * this.netresolution) + Global.netpadding / 2;
+			var ny = (y * this.netresolution)+ Global.netpadding / 2;
 
 			var node = new Netnode(this.net, this.nettex, nx + Global.noderad * 2, ny + Global.noderad * 2, Global.nodetint);
 
