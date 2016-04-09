@@ -218,7 +218,7 @@ Net.prototype.blastNodes = function(mx, my)
 
 		var angleRadians = Math.atan2(vn.y - vm.y, vn.x - vm.x);
 
-		var randomAngle = chance.floating({min: -10, max: 10});
+		var randomAngle = chance.floating({min: -Global.blastrandomness, max: Global.blastrandomness});
 
 		angleRadians += (randomAngle * (Math.PI / 180));
 

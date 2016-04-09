@@ -23,14 +23,15 @@ var Global =
 
 	forceradius: 190,
 	forceedge: 45,
-	blastforce: 90000,
+	blastforce: 100000,
+	blastrandomness: 20,
 	blastenergy: 8,
 	energyconsumption: 1,
 
 	spanningforce: 225,
 
-	decceleration: 1.0008,
-	relax: 4700,
+	decceleration: 1.0006,
+	relax: 4800,
 
 	maxvel: 10,
 
