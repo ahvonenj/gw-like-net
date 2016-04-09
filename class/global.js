@@ -18,15 +18,19 @@ var Global =
 		isup: true
 	},
 
-	forceradius: 150,
+	nodeterminaldistance: 15,
+	nodestaticdistance: 0.1,
+
+	forceradius: 190,
 	forceedge: 45,
-	blastforce: 30000,
+	blastforce: 90000,
 	blastenergy: 8,
 	energyconsumption: 1,
 
 	spanningforce: 225,
 
-	decceleration: 5.0001,
+	decceleration: 1.0008,
+	relax: 4700,
 
 	maxvel: 10,
 

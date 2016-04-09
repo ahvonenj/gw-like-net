@@ -202,6 +202,7 @@ Net.prototype.blastNodes = function(mx, my)
 
 		node.blasted = true;
 		node.blastenergy = Global.blastenergy;
+		node.reachedterminaldistance = false;
 
 		if(Math.floor(vm.distance(vn)) >= Math.ceil(Global.forceradius - Global.forceedge))
 		{
