@@ -1,4 +1,4 @@
-function Netnode(net, tex, x, y)
+function Netnode(net, tex, x, y, color)
 {
 	this.net = net;
 
@@ -27,6 +27,7 @@ function Netnode(net, tex, x, y)
 	this.affected = false;
 	this.blastenergy = Global.blastenergy;
 
+	this.color = color || Global.nodecolor;
 
 	this.tex = tex;
 	this.sprite = new PIXI.Sprite(this.tex);
@@ -96,129 +97,80 @@ Netnode.prototype.getFriend = function(dir)
 
 Netnode.prototype.update = function(dt)
 {
-	var vs;
-	
-	var vn = new Victor(this.x, this.y);
-	var vo = new Victor(this.ox, this.oy);
-
-	if(vn.distance(vo) > 0)
+	if(this.blasted)
 	{
-		var sa = Math.atan2(vo.y - vn.y, vo.x - vn.x);
-
-
-		vs = new Victor();
+		var vs;
 		
-		vs.x = Math.cos(sa);
-		vs.y = Math.sin(sa);
+		var vn = new Victor(this.x, this.y);
+		var vo = new Victor(this.ox, this.oy);
 
-	
-		var vonormal = vo.normalize();
-		var vnnormal = vn.normalize();
-		var dot = vnnormal.dot(vonormal);
-
-		//vs = vs.invert();
-	}
-	else
-	{
-		vs = new Victor(0, 0);
-	}
-
-
-	
-
-	this.acceleration.x += vs.x * Global.spanningforce;
-	this.acceleration.y += vs.y * Global.spanningforce;
-
-
-	if(vn.distance(vo) > 0)
-	{
-		this.acceleration.x -= Global.decceleration;
-		this.acceleration.y -= Global.decceleration;
-	}
-
-	/*if(this.acceleration.x > 1000)
-		this.acceleration.x = 1000;
-
-	if(this.acceleration.y > 1000)
-		this.acceleration.y = 1000;
-
-	if(this.acceleration.x < -1000)
-		this.acceleration.x = -1000;
-
-	if(this.acceleration.y < -1000)
-		this.acceleration.y = -1000;*/
-
-	this.velocity.x += this.acceleration.x;
-	this.velocity.y += this.acceleration.y;
-
-	if(this.velocity.x > Global.maxvel)
-		this.velocity.x = Global.maxvel;
-
-	if(this.velocity.x < -Global.maxvel)
-		this.velocity.x = -Global.maxvel;
-
-	if(this.velocity.y > Global.maxvel)
-		this.velocity.y = Global.maxvel;
-
-	if(this.velocity.y < -Global.maxvel)
-		this.velocity.y = -Global.maxvel;
-
-	this.x += this.velocity.x * dt;
-	this.y += this.velocity.y * dt;
-
-	/*if(vn.distance(vo) < 0.000001)
-	{
-		this.x = this.ox;
-		this.y = this.oy;
-		this.acceleration.x = 0;
-		this.acceleration.y = 0;
-		this.velocity.x = 0;
-		this.velocity.y = 0;
-	}*/
-
-	var vos = new Victor(Math.cos(this.acceleration.x), Math.sin(this.acceleration.y));
-
-	/*if(this.blasted)
-	{
-		for(var key in this.friends)
+		if(vn.distance(vo) > 0)
 		{
-			if(this.friends.hasOwnProperty(key))
-			{
-				var friend = this.friends[key];
+			var sa = Math.atan2(vo.y - vn.y, vo.x - vn.x);
 
-				friend.acceleration.x += vos.x;
-				friend.acceleration.y += vos.y;
-			}
+
+			vs = new Victor();
+			
+			vs.x = Math.cos(sa);
+			vs.y = Math.sin(sa);
+
+		
+			var vonormal = vo.normalize();
+			var vnnormal = vn.normalize();
+			var dot = vnnormal.dot(vonormal);
+
+			//vs = vs.invert();
 		}
+		else
+		{
+			vs = new Victor(0, 0);
+		}
+
+
+
+		this.acceleration.x += vs.x * Global.spanningforce;
+		this.acceleration.y += vs.y * Global.spanningforce;
+
+		//this.acceleration.x += -vs.x * 10000.005;
+		//this.acceleration.y += -vs.y * 10000.005;
+
+
+		this.velocity.x += this.acceleration.x;
+		this.velocity.y += this.acceleration.y;
+
+		
+
+		if(this.velocity.x > Global.maxvel)
+			this.velocity.x = Global.maxvel;
+
+		if(this.velocity.x < -Global.maxvel)
+			this.velocity.x = -Global.maxvel;
+
+		if(this.velocity.y > Global.maxvel)
+			this.velocity.y = Global.maxvel;
+
+		if(this.velocity.y < -Global.maxvel)
+			this.velocity.y = -Global.maxvel;
+
+		this.x += this.velocity.x * dt;
+		this.y += this.velocity.y * dt;
+
+		/*if(vn.distance(vo) < 0.000001)
+		{
+			this.x = this.ox;
+			this.y = this.oy;
+			this.acceleration.x = 0;
+			this.acceleration.y = 0;
+			this.velocity.x = 0;
+			this.velocity.y = 0;
+		}*/
+
+		var vos = new Victor(Math.cos(this.acceleration.x), Math.sin(this.acceleration.y));
 	}
-
-	if(this.affected)
-	{
-		for(var key in this.friends)
-		{
-			if(this.friends.hasOwnProperty(key))
-			{
-				var friend = this.friends[key];
-
-				friend.acceleration.x += vos.x;
-				friend.acceleration.y += vos.y;
-			}
-		}
-	}*/
-
-	/*for(var key in this.friends)
-	{
-		if(this.friends.hasOwnProperty(key))
-		{
-			var friend = this.friends[key];
-
-			friend.acceleration.x += vos.x;
-			friend.acceleration.y += vos.y;
-		}
-	}*/
 
 	if(this.sprite !== null)
 	{
+		this.sprite.tint = this.color;
 		this.sprite.position.x = this.x;
 		this.sprite.position.y = this.y;
 	}

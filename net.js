@@ -32,6 +32,15 @@ function Net()
 		ft: 0
 	};
 
+	this.stats = new Stats();
+	this.stats.setMode(0);
+
+	this.stats.domElement.style.position = 'absolute';
+	this.stats.domElement.style.left = '0px';
+	this.stats.domElement.style.top = '0px';
+
+	document.body.appendChild(this.stats.domElement);
+
 
 	// Init gameobject
 
@@ -138,6 +147,8 @@ Net.prototype.start = function()
 
 Net.prototype.animate = function(net)
 {
+	this.stats.begin();
+
 	net.t.now = timestamp();
 	net.t.ft = net.t.now - net.t.last;
 
@@ -156,6 +167,8 @@ Net.prototype.animate = function(net)
 	}
 
 	net.render();
+	this.stats.end();
+
 	requestAnimationFrame(function(t) { net.animate(net); });
 }
 
@@ -182,18 +195,25 @@ Net.prototype.blastNodes = function(mx, my)
 	{
 		var node = nodes[i];
 
-		node.blasted = true;
-		node.blastenergy = Global.blastenergy;
-
-		var affectednodes = this.gwnet.affectedNodes(node);
-
-		for(var j = 0; j < affectednodes.length; j++)
-		{
-			affectednodes[j].sprite.tint = 0xFF00FF;
-		}
+		//node.color = 0x00FFFF;
 
 		var vn = new Victor(node.x, node.y);
 		var vm = new Victor(mx, my);
+
+		node.blasted = true;
+		node.blastenergy = Global.blastenergy;
+
+		if(Math.floor(vm.distance(vn)) >= Math.ceil(Global.forceradius - Global.forceedge))
+		{
+			//node.color = 0xff0000;
+
+			var affectednodes = this.gwnet.affectedNodes(node);
+
+			for(var j = 0; j < affectednodes.length; j++)
+			{
+				affectednodes[j].color = 0x9b59b6;
+			}
+		}
 
 		var angleRadians = Math.atan2(vn.y - vm.y, vn.x - vm.x);
 
