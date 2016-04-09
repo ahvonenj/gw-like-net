@@ -26,6 +26,7 @@ function Netnode(net, tex, x, y, color)
 	this.blasted = false;
 	this.affected = false;
 	this.blastenergy = Global.blastenergy;
+	this.reachedterminaldistance = false;
 
 	this.color = color || Global.nodecolor;
 
@@ -127,9 +128,8 @@ Netnode.prototype.update = function(dt)
 		}
 
 
-
-		this.acceleration.x += vs.x * Global.spanningforce;
-		this.acceleration.y += vs.y * Global.spanningforce;
+		this.acceleration.x += vs.x * Global.spanningforce * (Math.sqrt(vn.length(vo)) * 1);
+		this.acceleration.y += vs.y * Global.spanningforce * (Math.sqrt(vn.length(vo)) * 1);
 
 		//this.acceleration.x += -vs.x * 10000.005;
 		//this.acceleration.y += -vs.y * 10000.005;
@@ -137,6 +137,12 @@ Netnode.prototype.update = function(dt)
 
 		this.velocity.x += this.acceleration.x;
 		this.velocity.y += this.acceleration.y;
+
+		this.acceleration.x = this.acceleration.x / Global.decceleration;
+		this.acceleration.y = this.acceleration.y / Global.decceleration;
+
+		this.velocity.x = this.velocity.x / Global.relax;
+		this.velocity.y = this.velocity.y / Global.relax;
 
 		
 
@@ -155,7 +161,7 @@ Netnode.prototype.update = function(dt)
 		this.x += this.velocity.x * dt;
 		this.y += this.velocity.y * dt;
 
-		/*if(vn.distance(vo) < 0.000001)
+		if(vn.distance(vo) <= Global.nodestaticdistance && this.reachedterminaldistance)
 		{
 			this.x = this.ox;
 			this.y = this.oy;
@@ -163,7 +169,16 @@ Netnode.prototype.update = function(dt)
 			this.acceleration.y = 0;
 			this.velocity.x = 0;
 			this.velocity.y = 0;
-		}*/
+			this.blasted = false;
+		}
+
+		if(!this.reachedterminaldistance)
+		{
+			if(vn.distance(vo) > Global.nodeterminaldistance)
+			{
+				this.reachedterminaldistance = true;
+			}
+		}
 
 		var vos = new Victor(Math.cos(this.acceleration.x), Math.sin(this.acceleration.y));
 	}
