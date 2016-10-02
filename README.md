@@ -4,6 +4,14 @@ As of 7.4.2016 the nodes do not yet affect each other. When I figure out the mat
 
 As of 9.4.2016 the net and the nodes now span, relax and deccelerate; eventually reaching a point where they become static again.
 
+# Version 1.1
+
+## NOTE
+
+I remade the whole thing in jsfiddle when I was bored. It does not use any canvas libraries, but instead uses the vectorious vector library for vector calculations. Much faster, better looking and optimized!
+
+https://jsfiddle.net/ahvonenj/rkjbpefv/
+
 ## Version 1.0
 
 ![](http://puu.sh/obXji/96413b153e.png)
